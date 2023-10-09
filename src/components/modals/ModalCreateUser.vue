@@ -15,7 +15,7 @@
               required
             ></v-text-field>
             <div class="text-right">
-              <v-btn color="success">Create</v-btn>
+              <v-btn color="success" @click="createUser()">Create</v-btn>
             </div>
           </v-form>
         </v-card-text>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   props: {
     visible: {
@@ -51,7 +52,23 @@ export default {
       },
     },
   },
-};
+  methods: {
+    ...mapActions({
+      createUserSt:'UserStoreModule/createUser'
+    }),
+    createUser() {
+      this.createUserSt({
+        user_name: this.name
+      }).then((res) => {
+        if(res.status === 201) {
+           console.log('created!')
+        } else {
+          console.log('created error!')
+        }
+      })
+    }
+  },
+}
 </script>
 
 <style lang="scss" scoped></style>
