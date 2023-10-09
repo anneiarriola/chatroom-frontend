@@ -14,8 +14,23 @@
               label="User name"
               required
             ></v-text-field>
+            <v-alert v-if="showSuccess" dense text type="success">
+              User created!
+            </v-alert>
+            <v-alert v-if="showError" dense outlined type="error">
+              User already exist!
+            </v-alert>
             <div class="text-right">
-              <v-btn color="success" @click="createUser()">Create</v-btn>
+              <v-btn text color="error" @click="show = false" class="mr-5">Cancel</v-btn>
+              <v-btn
+                color="success"
+                :disabled="isLoadingCreation"
+                :loading="isLoadingCreation"
+                @click="createUser()"
+              >
+                <template v-slot:loader> <span>Loading...</span> </template
+                >Create</v-btn
+              >
             </div>
           </v-form>
         </v-card-text>
@@ -25,7 +40,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations, mapState } from "vuex";
 export default {
   props: {
     visible: {
@@ -35,12 +50,18 @@ export default {
   },
   data() {
     return {
-      name: '',
+      name: "",
       statusCreatedUser: null,
-      valid: false
+      valid: false,
+      showError: false,
+      showSuccess: false,
     };
   },
   computed: {
+    ...mapState({
+      isLoadingCreation: (state) => state.UserStoreModule.isLoadingCreateUser,
+      user: (state) => state.UserStoreModule.userCreated
+    }),
     show: {
       get() {
         return this.visible;
@@ -54,21 +75,36 @@ export default {
   },
   methods: {
     ...mapActions({
-      createUserSt:'UserStoreModule/createUser'
+      createUserSt: "UserStoreModule/createUser",
     }),
+    ...mapMutations({
+      setLoadingCreateSt: "UserStoreModule/setLoadingCreateUser",
+    }),
+    resetForm() {
+      this.name = "";
+      this.$refs.form.resetValidation();
+    },
     createUser() {
       this.createUserSt({
-        user_name: this.name
+        user_name: this.name,
       }).then((res) => {
-        if(res.status === 201) {
-           console.log('created!')
+        if (res.status === 201) {
+          this.showSuccess = true;
+          this.resetForm();
+          this.show = false;
+          console.log("created!");
         } else {
-          console.log('created error!')
+          this.showError = true;
+          setTimeout(() => {
+            this.showError = false;
+            this.resetForm();
+          }, 800);
+          console.log("created error!");
         }
-      })
-    }
+      });
+    },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped></style>

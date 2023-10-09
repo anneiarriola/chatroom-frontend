@@ -4,7 +4,12 @@
       <v-list>
         <v-list-item class="px-2">
           <v-list-item-content>
-            <v-list-item-title>Chats</v-list-item-title>
+            <v-list-item-title
+              >Chats for
+              <strong v-if="user">{{
+                user.user_name
+              }}</strong></v-list-item-title
+            >
           </v-list-item-content>
           <v-list-item-action>
             <v-btn icon @click="createChatRoom()">
@@ -14,16 +19,38 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
+
+      <v-list>
+        <v-list-item v-if="chat === ''"> No Chats! </v-list-item>
+        <v-list-item v-for="(chat, i)  in chatRoom" :key="i">
+          <v-list-item-content>
+            <v-list-item-title>{{chat.name}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
     </v-navigation-drawer>
     <v-app-bar app>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>ChatRoom</v-toolbar-title>
+      <v-app-bar-nav-icon
+        v-if="user !== null"
+        @click="drawer = !drawer"
+      ></v-app-bar-nav-icon>
+      <v-toolbar-title>ChatRoom {{ user }}</v-toolbar-title>
     </v-app-bar>
     <v-main class="mx-5">
-      <h1 class="text-h3">Welcome to the Chat!</h1>
-      <h2 class="text-h5">To start please, create a user!</h2>
+      <div v-if="user !== null">
+        <h1 class="text-h3">
+          Welcome to the Chat! <br />
+          <strong class="primary--text">{{ user.user_name }}</strong>
+        </h1>
+      </div>
+      <div v-else>
+        <h1 class="text-h3">Welcome to the Chat!</h1>
+        <h2 class="text-h5">To start please, create a user!</h2>
 
-      <v-btn text class="text-none primary--text" @click="createUser()">Create user</v-btn>
+        <v-btn text class="text-none primary--text" @click="createUser()"
+          >Create user</v-btn
+        >
+      </div>
     </v-main>
     <create-chat-room
       :visible="showCreateChatRoom"
@@ -37,10 +64,10 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import { mapActions, mapState } from "vuex";
 export default {
   data: () => ({
-    drawer: null,
+    drawer: false,
     showCreateChatRoom: false,
     showCreateUser: false,
   }),
@@ -48,12 +75,20 @@ export default {
     CreateChatRoom: () => import("@/components/modals/ModalCreateChatRoom.vue"),
     ModalCreateUser: () => import("@/components/modals/ModalCreateUser.vue"),
   },
-  mounted () {
-    this.fetchUserSt();
+  mounted() {
+    this.fetchChatRoomSt();
+  },
+  computed: {
+    ...mapState({
+      isLoadingCreation: (state) => state.UserStoreModule.isLoadingCreateUser,
+      user: (state) => state.UserStoreModule.userCreated,
+      chatRoom: (state) => state.ChatRoomStoreModule.chatroom
+    }),
   },
   methods: {
     ...mapActions({
-      fetchUserSt: 'UserStoreModule/fetchUser'
+      fetchUserSt: "UserStoreModule/fetchUser",
+      fetchChatRoomSt: "ChatRoomStoreModule/fetchChatRoom",
     }),
     createUser() {
       this.showCreateUser = true;
