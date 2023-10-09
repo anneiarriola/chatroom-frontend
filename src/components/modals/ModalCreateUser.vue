@@ -7,6 +7,7 @@
     >
       <v-card>
         <v-card-title>Create User</v-card-title>
+        pre {{ user }}
         <v-card-text>
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field
@@ -60,7 +61,7 @@ export default {
   computed: {
     ...mapState({
       isLoadingCreation: (state) => state.UserStoreModule.isLoadingCreateUser,
-      user: (state) => state.UserStoreModule.userCreated
+      user: (state) => state.user
     }),
     show: {
       get() {
@@ -76,6 +77,8 @@ export default {
   methods: {
     ...mapActions({
       createUserSt: "UserStoreModule/createUser",
+      setLocalStorageSt: 'setUserLocalStorage',
+      setUserIdLocatStorageSt: 'setUserIdLocalStorage'
     }),
     resetForm() {
       this.name = "";
@@ -85,8 +88,11 @@ export default {
       this.createUserSt({
         user_name: this.name,
       }).then((res) => {
+        console.log('res', res.data)
         if (res.status === 201) {
           this.showSuccess = true;
+          this.setLocalStorageSt(this.name)
+          this.setUserIdLocatStorageSt(res.data.user._id)
           this.resetForm();
           this.show = false;
           console.log("created!");

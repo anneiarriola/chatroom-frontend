@@ -1,27 +1,21 @@
 <template>
   <v-app>
     <v-main>
-      <welcome-chat/>
+      <welcome-chat />
     </v-main>
   </v-app>
 </template>
 
 <script>
-import WelcomeChat from './components/WelcomeChat.vue';
+import WelcomeChat from "./components/WelcomeChat.vue";
 
 export default {
-  name: 'App',
+  name: "App",
 
   components: {
     WelcomeChat,
   },
-
-  data: () => ({
-    //
-  }),
-   created() {
-    console.log(process.env.URL_API);
-  },
+  data: () => ({}),
 };
 </script>
 <style>
