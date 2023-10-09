@@ -19,6 +19,9 @@ export default {
   data: () => ({
     //
   }),
+   created() {
+    console.log(process.env.URL_API);
+  },
 };
 </script>
 <style>
