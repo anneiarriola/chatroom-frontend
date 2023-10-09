@@ -14,8 +14,14 @@
               label="Name Chat Room"
               required
             ></v-text-field>
+                  <v-alert v-if="showSuccess" dense text type="success">
+              User created!
+            </v-alert>
+            <v-alert v-if="showError" dense outlined type="error">
+              User already exist!
+            </v-alert>
             <div class="text-right">
-              <v-btn color="success">Create</v-btn>
+              <v-btn color="success" @click="createChatRoom()">Create</v-btn>
             </div>
           </v-form>
         </v-card-text>
@@ -25,6 +31,7 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
 export default {
   props: {
     visible: {
@@ -36,10 +43,15 @@ export default {
     return {
       name: '',
       statusCreatedChat: null,
-      valid: false
+      valid: false,
+      showError: false,
+      showSuccess: false,
     };
   },
   computed: {
+     ...mapState({
+      isLoadingCreation: (state) => state.ChatRoomStoreModule.isLoadingCreateChat,
+    }),
     show: {
       get() {
         return this.visible;
@@ -49,6 +61,34 @@ export default {
           this.$emit("close", this.statusCreatedChat);
         }
       },
+    },
+  },
+  methods: {
+      ...mapActions({
+      createChatRoomSt: "ChatRoomStoreModule/createChatRoom",
+    }),
+     resetForm() {
+      this.name = "";
+      this.$refs.form.resetValidation();
+    },
+    createChatRoom() {
+      this.createChatRoomSt({
+        name: this.name,
+      }).then((res) => {
+        if (res.status === 201) {
+          this.showSuccess = true;
+          this.resetForm();
+          this.show = false;
+          console.log("created!");
+        } else {
+          this.showError = true;
+          setTimeout(() => {
+            this.showError = false;
+            this.resetForm();
+          }, 800);
+          console.log("created error!");
+        }
+      });
     },
   },
 };

@@ -21,9 +21,9 @@
       <v-divider></v-divider>
 
       <v-list>
-        <v-list-item v-if="chat === ''"> No Chats! </v-list-item>
         <v-list-item v-for="(chat, i)  in chatRoom" :key="i">
           <v-list-item-content>
+            <v-list-item-title v-if="chat === ''"> No Chats!></v-list-item-title>
             <v-list-item-title>{{chat.name}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -65,9 +65,10 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+// import SocketChatRoom from '../api/chatroom/chatroom-api'
 export default {
   data: () => ({
-    drawer: false,
+    drawer: true,
     showCreateChatRoom: false,
     showCreateUser: false,
   }),
@@ -76,7 +77,7 @@ export default {
     ModalCreateUser: () => import("@/components/modals/ModalCreateUser.vue"),
   },
   mounted() {
-    this.fetchChatRoomSt();
+    this.fetchChatRoomSt()
   },
   computed: {
     ...mapState({

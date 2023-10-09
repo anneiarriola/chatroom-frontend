@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
   props: {
     visible: {
@@ -76,9 +76,6 @@ export default {
   methods: {
     ...mapActions({
       createUserSt: "UserStoreModule/createUser",
-    }),
-    ...mapMutations({
-      setLoadingCreateSt: "UserStoreModule/setLoadingCreateUser",
     }),
     resetForm() {
       this.name = "";
