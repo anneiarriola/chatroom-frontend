@@ -1,20 +1,15 @@
 <template>
   <v-app>
     <v-main>
-      <welcome-chat />
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import WelcomeChat from "./components/WelcomeChat.vue";
-
 export default {
   name: "App",
 
-  components: {
-    WelcomeChat,
-  },
   data: () => ({}),
 };
 </script>
