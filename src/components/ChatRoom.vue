@@ -104,7 +104,7 @@ export default {
   },
   mounted() {
     // Conectar al espacio de nombres específico en el servidor
-    this.socket = io(process.env.URL_SOCKET);
+    this.socket = io(process.env.VUE_APP_URL_SOCKET);
     // Escuchar eventos del socket
     this.socket.on(this.room, (message) => {
       console.log("dsadasd", message);
