@@ -67,18 +67,18 @@
               color="blue"
               class="my-3"
               :class="{
-                'message-bubble': message.user_sender_id !== userIdSt,
-                'message-bubble.sender': message.user_sender_id === userIdSt,
+                'message-bubble': message.user_sender_id._id !== userIdSt,
+                'message-bubble.sender': message.user_sender_id._id === userIdSt,
               }"
             >
               <v-list-item-content
                 :class="{
-                  'text-left': message.user_sender_id !== userIdSt,
-                  'text-right': message.user_sender_id === userIdSt,
+                  'text-left': message.user_sender_id._id !== userIdSt,
+                  'text-right': message.user_sender_id._id  === userIdSt,
                 }"
               >
                 <v-list-item-subtitle class="font-weight-regular"
-                  >{{ message.user_name }}
+                  >{{ message.user_sender_id.user_name }}
                   <span class="text-caption text-right">{{
                     formatDateTime(message.timestamp)
                   }}</span></v-list-item-subtitle
