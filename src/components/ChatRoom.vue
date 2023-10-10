@@ -36,14 +36,6 @@
       </v-navigation-drawer>
 
       <v-sheet color="grey lighten-5" height="128" width="100%"></v-sheet>
-
-      <v-list class="pl-14" shaped>
-        <v-list-item v-for="n in 5" :key="n" link>
-          <v-list-item-content>
-            <v-list-item-title>Item {{ n }} room {{ room }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
     </v-navigation-drawer>
     <div>
       <v-card elevation="0">
@@ -53,6 +45,11 @@
               v-for="(message, index) in allMessagesSt"
               :key="index"
               color="blue"
+              class="my-3"
+              :class="{
+                'message-bubble': message.user_sender_id !== userIdSt,
+                'message-bubble.sender': message.user_sender_id === userIdSt,
+              }"
             >
               <v-list-item-content
                 :class="{
@@ -60,12 +57,15 @@
                   'text-right': message.user_sender_id === userIdSt,
                 }"
               >
-                <v-list-item-title class="font-weight-bold"
-                  >Autor {{ message.user_sender_id }}</v-list-item-title
+                <v-list-item-subtitle class="font-weight-regular"
+                  >{{ message.user_sender_id }}
+                  <span class="text-caption text-right">{{
+                    formatDateTime(message.timestamp)
+                  }}</span></v-list-item-subtitle
                 >
-                <v-list-item-subtitle>{{
-                  message.content
-                }}</v-list-item-subtitle>
+                <v-list-item-title class="font-weight-medium"
+                  >{{ message.content }}
+                </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -75,10 +75,12 @@
         <v-text-field
           v-model="newMessage"
           @keyup.enter="sendMessage"
-          background-color="grey lighten-1"
+          background-color="grey lighten-3"
           dense
           flat
+          append-icon="mdi-send-variant-outline"
           hide-details
+          placeholder="Type a message..."
           rounded
           solo
         ></v-text-field>
@@ -96,7 +98,6 @@ export default {
       drawer: null,
       room: this.$route.params.room,
       socket: null,
-      // messages: [],
       newMessage: "",
       formattedDate: "",
     };
@@ -160,9 +161,28 @@ export default {
       };
       this.formattedDate = currentDate.toLocaleDateString(undefined, options);
     },
+    formatDateTime(dateTimeString) {
+      const options = { hour: "numeric", minute: "numeric", hour12: true };
+      return new Date(dateTimeString).toLocaleTimeString(undefined, options);
+    },
   },
 };
 </script>
 <style scoped>
+.message-bubble {
+  background-color: #c1e7ffc8;
+  color: #333;
+  border-radius: 14px;
+  padding: 10px 15px;
+  font-size: 14px;
+  max-width: 50%;
+  word-wrap: break-word;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
 
+.message-bubble.sender {
+  background-color: #6996b3;
+  align-self: flex-end;
+}
 </style>
