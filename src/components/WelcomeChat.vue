@@ -5,9 +5,21 @@
         <v-list-item class="px-2">
           <v-list-item-content>{{ user }}</v-list-item-content>
           <v-list-item-action>
-            <v-btn icon @click="createChatRoom()">
-              <v-icon color="primary">mdi-plus</v-icon>
-            </v-btn>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="primary"
+                  dark
+                  v-bind="attrs"
+                  v-on="on"
+                  icon
+                  @click="createChatRoom()"
+                >
+                  <v-icon color="primary">mdi-plus</v-icon>
+                </v-btn>
+              </template>
+              <span>Create Chat Room</span>
+            </v-tooltip>
           </v-list-item-action>
         </v-list-item>
       </v-list>
@@ -33,11 +45,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar app>
-      <v-app-bar-nav-icon
-        v-if="user !== null"
-        @click="drawer = !drawer"
-      ></v-app-bar-nav-icon>
-      <v-toolbar-title>ChatRoom {{ user }}</v-toolbar-title>
+      <v-toolbar-title>ChatRoom App</v-toolbar-title>
     </v-app-bar>
     <v-main class="mx-5">
       <div v-if="user !== null">
@@ -131,8 +139,7 @@ export default {
         chat_room_id: chat_id,
       }).then((res) => {
         if (res.status === 200) {
-          console.log(res)
-          // this.$router.push('/chatroom/' + chat_id);
+          this.$router.push("/chatroom/" + chat_id);
         } else {
           this.showJoinChat = true;
           this.chatRoomName = chatname;

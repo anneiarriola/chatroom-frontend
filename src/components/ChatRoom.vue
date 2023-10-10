@@ -106,7 +106,7 @@ export default {
     // Conectar al espacio de nombres específico en el servidor
     this.socket = io(`http://localhost:3000/`);
     // Escuchar eventos del socket
-    this.socket.on("onMessage", (message) => {
+    this.socket.on(this.room, (message) => {
       console.log("dsadasd", message);
       this.allMessagesSt.push(message);
     });
