@@ -5,7 +5,7 @@ export default class AxiosService {
     return new Promise((resolve) => {
       axios({
         method: 'get',
-        url: `${useBaseUrl ? 'http://localhost:3000/v1/' : ''}${endpoint}`,
+        url: `${useBaseUrl ? 'https://chatroom-backend-ov5r4k05w-anneiarriola.vercel.app/v1/' : ''}${endpoint}`,
         headers: {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -47,7 +47,7 @@ export default class AxiosService {
     return new Promise((resolve) => {
       axios({
         method: 'POST',
-        url: `${useBaseUrl ? 'http://localhost:3000/v1/' : ''}${endpoint}`,
+        url: `${useBaseUrl ? 'https://chatroom-backend-ov5r4k05w-anneiarriola.vercel.app/v1/' : ''}${endpoint}`,
         data: body
       })
         .then((res) => {
@@ -85,7 +85,7 @@ export default class AxiosService {
     return new Promise((resolve) => {
       axios({
         method: 'PUT',
-        url: `${useBaseUrl ? 'http://localhost:3000/v1/' : ''}${endpoint}`,
+        url: `${useBaseUrl ? 'https://chatroom-backend-ov5r4k05w-anneiarriola.vercel.app/v1/' : ''}${endpoint}`,
         data: body
       })
         .then((res) => {
@@ -123,7 +123,7 @@ export default class AxiosService {
     return new Promise((resolve) => {
       axios({
         method: 'DELETE',
-        url: `${useBaseUrl ? 'http://localhost:3000/v1/' : ''}${endpoint}`,
+        url: `${useBaseUrl ? 'https://chatroom-backend-ov5r4k05w-anneiarriola.vercel.app/v1/' : ''}${endpoint}`,
         data: body
       })
         .then((res) => {

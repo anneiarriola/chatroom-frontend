@@ -104,7 +104,7 @@ export default {
   },
   mounted() {
     // Conectar al espacio de nombres específico en el servidor
-    this.socket = io(`http://localhost:3000/`);
+    this.socket = io(`https://chatroom-backend-ov5r4k05w-anneiarriola.vercel.app/v1/`);
     // Escuchar eventos del socket
     this.socket.on(this.room, (message) => {
       console.log("dsadasd", message);

@@ -31,17 +31,7 @@ This project is an interactive chatroom built using modern technologies like Vue
 1. **Install Dependencies:**
    - Make sure you have Node.js and MongoDB installed on your system.
    - Run `npm install` in the project directory to install server dependencies.
-
-2. **Database Configuration:**
-   - Configure the MongoDB connection in the server configuration file.
-
-3. **Run the Server:**
-   - Run `nodemon server.js` to start the chatroom server.
-
-4. **Client Configuration:**
-   - Configure the client's connection via Socket.io in the client configuration file (e.g., `src/socket.js`).
-
-5. **Run the Client:**
+2. **Run the Client:**
    - Run `npm run serve` to start the chatroom client application.
 
 ## Contribution

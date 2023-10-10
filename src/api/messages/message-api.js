@@ -12,7 +12,6 @@ export default class MessageApi {
   static fetchAllMessage() {
     return new Promise((resolve) => {
       AxiosService.getRequest(true, "message/fetch", {}).then((res) => {
-        console.log(res)
         resolve(res);
       });
     });
