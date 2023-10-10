@@ -78,7 +78,7 @@
                 }"
               >
                 <v-list-item-subtitle class="font-weight-regular"
-                  >{{ message.user_sender_id }}
+                  >{{ message.user_name }}
                   <span class="text-caption text-right">{{
                     formatDateTime(message.timestamp)
                   }}</span></v-list-item-subtitle
