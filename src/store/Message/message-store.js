@@ -47,11 +47,11 @@ export default {
       }
     },
 
-    fetchAllMessages({ commit }) {
+    fetchAllMessages({ commit }, body) {
       commit("setLoadingAllMessage", true);
       try {
         return new Promise((resolve, reject) => {
-          MessageApi.fetchAllMessage()
+          MessageApi.fetchAllMessage(body)
             .then((res) => {
               commit("setAllMessage", res.data);
               commit("setLoadingAllMessage", false);

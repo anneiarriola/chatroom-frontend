@@ -9,9 +9,9 @@ export default class MessageApi {
     });
   }
 
-  static fetchAllMessage() {
+  static fetchAllMessage(body) {
     return new Promise((resolve) => {
-      AxiosService.getRequest(true, "message/fetch", {}).then((res) => {
+      AxiosService.getRequest(true, "message/fetch", body).then((res) => {
         resolve(res);
       });
     });

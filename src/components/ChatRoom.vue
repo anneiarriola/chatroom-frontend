@@ -134,7 +134,7 @@ export default {
     this.socket.on("disconnect", () => {
       console.log("Desconectado del servidor");
     });
-    this.fetchAllMessageSt();
+    this.fetchAllMessageSt({'chat_room_id': this.$route.params.room});
     this.updateDate();
     // Update the date every second (1000 milliseconds)
     setInterval(() => {
