@@ -109,7 +109,6 @@ export default {
     });
     // Escuchar eventos del socket
     this.socket.on(this.room, (message) => {
-      // console.log("msg", message);
       this.allMessagesSt.push(message);
     });
 

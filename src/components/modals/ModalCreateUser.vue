@@ -88,7 +88,6 @@ export default {
       this.createUserSt({
         user_name: this.name,
       }).then((res) => {
-        console.log('res', res.data)
         if (res.status === 201) {
           this.showSuccess = true;
           this.setLocalStorageSt(this.name)

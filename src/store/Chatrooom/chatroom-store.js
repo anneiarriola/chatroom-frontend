@@ -44,7 +44,6 @@ export default {
           setTimeout(() => {
             ChatRoomApi.createChatRoom(data)
               .then((res) => {
-                console.log("res", res);
                 commit("setAddChatRoom", temp);
                 commit("setLoadingCreation", false);
                 resolve(res);
