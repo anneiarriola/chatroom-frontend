@@ -7,7 +7,7 @@
     </v-system-bar>
 
     <v-app-bar app clipped-right flat height="72">
-      Chat
+      Messages
       <v-spacer></v-spacer>
     </v-app-bar>
 
@@ -35,7 +35,27 @@
         ></v-avatar>
       </v-navigation-drawer>
 
-      <v-sheet color="grey lighten-5" height="128" width="100%"></v-sheet>
+      <v-sheet color="grey lighten-5" height="128" width="100%">
+        <v-sheet color="grey lighten-5" height="100" width="100%"></v-sheet>
+        <v-list class="pl-14" shaped>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>Chat List</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider></v-divider>
+          <v-list-item
+            v-for="chat in chatRoom"
+            :key="chat._id"
+            link
+            :href="'/chatroom/' + chat._id"
+          >
+            <v-list-item-content>
+              <v-list-item-title>{{ chat.name }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-sheet>
     </v-navigation-drawer>
     <div>
       <v-card elevation="0">
@@ -75,6 +95,7 @@
         <v-text-field
           v-model="newMessage"
           @keyup.enter="sendMessage"
+          @click:append="sendMessage"
           background-color="grey lighten-3"
           dense
           flat
@@ -119,11 +140,13 @@ export default {
     setInterval(() => {
       this.updateDate();
     }, 1000);
+    this.fetchChatRoomSt();
   },
 
   computed: {
     ...mapState({
       userIdSt: (state) => state.userId,
+      chatRoom: (state) => state.ChatRoomStoreModule.chatroom,
       isLoadingMessage: (state) => state.MessageStoreModule.isLoadingMessage,
       allMessagesSt: (state) => state.MessageStoreModule.allMessages,
     }),
@@ -132,6 +155,7 @@ export default {
     ...mapActions({
       createMessageSt: "MessageStoreModule/createMessageStore",
       fetchAllMessageSt: "MessageStoreModule/fetchAllMessages",
+      fetchChatRoomSt: "ChatRoomStoreModule/fetchChatRoom",
     }),
     sendMessage() {
       if (this.newMessage.trim() === "") return;
