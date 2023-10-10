@@ -107,7 +107,7 @@ export default {
     this.socket = io(process.env.VUE_APP_URL_SOCKET);
     // Escuchar eventos del socket
     this.socket.on(this.room, (message) => {
-      console.log("dsadasd", message);
+      // console.log("msg", message);
       this.allMessagesSt.push(message);
     });
 
@@ -141,12 +141,6 @@ export default {
         chat_room_id: this.room,
         content: this.newMessage,
       });
-      // this.socket.emit("message", {
-      //   user_sender_id: this.userIdSt,
-      //   chat_room_id: this.room,
-      //   content: this.newMessage,
-      // });
-      // console.log(this.socket);
       this.newMessage = "";
     },
     updateDate() {
