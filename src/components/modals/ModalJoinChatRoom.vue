@@ -13,7 +13,7 @@
           <pre>
          user: {{ userId }}
          chatid: {{ chat_id }}
-         {{ user }}
+         name: {{ user }}
           </pre>
           <v-form ref="form" v-model="valid" lazy-validation>
             <div class="text-right">
@@ -88,9 +88,6 @@ export default {
         user_id: this.userId,
         chat_room_id: this.chat_id,
       }).then((res) => {
-        if (res.status === 404) {
-          this.onboarding = 2;
-        }
         if (res.status === 201) {
           this.showSuccess = true;
           this.resetForm();

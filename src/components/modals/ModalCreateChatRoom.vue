@@ -4,8 +4,9 @@
       v-model="show"
       max-width="500px"
       transition="dialog-top-transition"
+      persistent
     >
-      <v-card>
+      <v-card rounded="lg">
         <v-card-title>Create Chat Room</v-card-title>
         <v-card-text>
           <v-form ref="form" v-model="valid" lazy-validation>
@@ -14,14 +15,29 @@
               label="Name Chat Room"
               required
             ></v-text-field>
-                  <v-alert v-if="showSuccess" dense text type="success">
+            <v-alert v-if="showSuccess" dense text type="success">
               User created!
             </v-alert>
             <v-alert v-if="showError" dense outlined type="error">
               User already exist!
             </v-alert>
             <div class="text-right">
-              <v-btn color="success" @click="createChatRoom()">Create</v-btn>
+              <v-btn
+                text
+                color="error"
+                class="text-none mr-5"
+                @click="show = false"
+                >Cancel</v-btn
+              >
+              <v-btn
+                color="success"
+                @click="createChatRoom()"
+                :loading="isLoadingCreation"
+                :disabled="isLoadingCreation"
+                >Create
+
+                <template v-slot:loader> <span>Loading...</span> </template>
+              </v-btn>
             </div>
           </v-form>
         </v-card-text>
@@ -41,7 +57,7 @@ export default {
   },
   data() {
     return {
-      name: '',
+      name: "",
       statusCreatedChat: null,
       valid: false,
       showError: false,
@@ -49,8 +65,9 @@ export default {
     };
   },
   computed: {
-     ...mapState({
-      isLoadingCreation: (state) => state.ChatRoomStoreModule.isLoadingCreateChat,
+    ...mapState({
+      isLoadingCreation: (state) =>
+        state.ChatRoomStoreModule.isLoadingCreateChat,
     }),
     show: {
       get() {
@@ -64,10 +81,10 @@ export default {
     },
   },
   methods: {
-      ...mapActions({
+    ...mapActions({
       createChatRoomSt: "ChatRoomStoreModule/createChatRoom",
     }),
-     resetForm() {
+    resetForm() {
       this.name = "";
       this.$refs.form.resetValidation();
     },
@@ -85,7 +102,7 @@ export default {
           setTimeout(() => {
             this.showError = false;
             this.resetForm();
-          }, 800);
+          }, 1800);
           console.log("created error!");
         }
       });

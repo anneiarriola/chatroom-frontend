@@ -3,13 +3,15 @@ import Vuex from "vuex";
 import UserStoreModule from "@/store/Users/user-store";
 import ChatRoomStoreModule from '@/store/Chatrooom/chatroom-store'
 import UserChatroomStoreModule from "./Chatrooom/user-chatroom-store";
+import MessageStoreModule from '@/store/Message/message-store'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
     UserStoreModule,
     ChatRoomStoreModule,
-    UserChatroomStoreModule
+    UserChatroomStoreModule,
+    MessageStoreModule
   },
   state: () => ({
     user: localStorage.getItem('user'),

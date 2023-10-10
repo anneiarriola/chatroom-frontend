@@ -4,6 +4,7 @@
       v-model="show"
       max-width="500px"
       transition="dialog-top-transition"
+      persistent
     >
       <v-card>
         <v-card-title>Create User</v-card-title>

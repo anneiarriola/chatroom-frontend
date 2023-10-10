@@ -3,7 +3,7 @@
     <v-navigation-drawer v-model="drawer" app>
       <v-list>
         <v-list-item class="px-2">
-          <v-list-item-content>{{user}}</v-list-item-content>
+          <v-list-item-content>{{ user }}</v-list-item-content>
           <v-list-item-action>
             <v-btn icon @click="createChatRoom()">
               <v-icon color="primary">mdi-plus</v-icon>
@@ -17,7 +17,11 @@
         <v-list-item
           v-for="(chat, i) in chatRoom"
           :key="i"
-          @click="openJoinChat(true, chat.name,'',chat._id)"
+          @click="
+            () => {
+              openJoinChat(chat.name, chat._id);
+            }
+          "
         >
           <v-list-item-content>
             <v-list-item-title v-if="chat === ''">
@@ -39,7 +43,7 @@
       <div v-if="user !== null">
         <h1 class="text-h3">
           Welcome to the Chat! <br />
-          <strong class="primary--text">{{ user.user_name }}</strong>
+          <strong class="primary--text">{{ user }}</strong>
         </h1>
       </div>
       <div v-else>
@@ -62,7 +66,7 @@
     <modal-join-chat-room
       :visible="showJoinChat"
       :chat_name="chatRoomName"
-      :user_id="userId"
+      :user_id="user_id"
       :chat_id="chatId"
       @close="onCloseModalJoinChat"
     />
@@ -77,9 +81,9 @@ export default {
     showCreateChatRoom: false,
     showCreateUser: false,
     showJoinChat: false,
-    chatRoomName: '',
-    userId: '',
-    chatId:''
+    chatRoomName: "",
+    chatId: "",
+    user_id: "",
   }),
   components: {
     CreateChatRoom: () => import("@/components/modals/ModalCreateChatRoom.vue"),
@@ -88,22 +92,26 @@ export default {
       import("@/components/modals/ModalJoinChatRoom.vue"),
   },
   mounted() {
-    this.createUser()
+    this.createUser();
     this.fetchChatRoomSt();
   },
   computed: {
     ...mapState({
       user: (state) => state.user,
+      userIdSt: (state) => state.userId,
       chatRoom: (state) => state.ChatRoomStoreModule.chatroom,
+      isLoadingCreationChatRoom: (state) =>
+        state.ChatRoomStoreModule.isLoadingCreateChat,
     }),
   },
   methods: {
     ...mapActions({
       fetchUserSt: "UserStoreModule/fetchUser",
       fetchChatRoomSt: "ChatRoomStoreModule/fetchChatRoom",
+      validJointChatSt: "UserChatroomStoreModule/validateChatRoomSt",
     }),
     createUser() {
-      this.showCreateUser = !this.user
+      this.showCreateUser = !this.user;
     },
     onCloseModalCreateUser() {
       this.showCreateUser = false;
@@ -117,11 +125,21 @@ export default {
     onCloseModalJoinChat() {
       this.showJoinChat = false;
     },
-    openJoinChat(active,name,id,chatid) {
-      this.showJoinChat = active;
-      this.chatRoomName = name
-      this.userId = id
-      this.chatId = chatid
+    openJoinChat(chatname, chat_id) {
+      this.validJointChatSt({
+        user_id: this.userIdSt,
+        chat_room_id: chat_id,
+      }).then((res) => {
+        if (res.status === 200) {
+          console.log(res)
+          // this.$router.push('/chatroom/' + chat_id);
+        } else {
+          this.showJoinChat = true;
+          this.chatRoomName = chatname;
+          this.userId = this.userIdSt;
+          this.chatId = chat_id;
+        }
+      });
     },
   },
 };

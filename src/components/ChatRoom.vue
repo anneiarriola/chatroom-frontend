@@ -3,25 +3,12 @@
     <v-system-bar app>
       <v-spacer></v-spacer>
 
-      <v-icon>mdi-square</v-icon>
-
-      <v-icon>mdi-circle</v-icon>
-
-      <v-icon>mdi-triangle</v-icon>
+      <span>{{ formattedDate }}</span>
     </v-system-bar>
 
     <v-app-bar app clipped-right flat height="72">
+      Chat
       <v-spacer></v-spacer>
-
-      <v-responsive max-width="156">
-        <v-text-field
-          dense
-          flat
-          hide-details
-          rounded
-          solo-inverted
-        ></v-text-field>
-      </v-responsive>
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" app width="300">
@@ -58,41 +45,124 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-
-    <v-navigation-drawer app clipped right>
-      <v-list>
-        <v-list-item v-for="n in 5" :key="n" link>
-          <v-list-item-content>
-            <v-list-item-title>Item {{ n }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-main>
-      <!--  -->
-    </v-main>
-
-    <v-footer app color="transparent" height="72" inset>
-      <v-text-field
-        background-color="grey lighten-1"
-        dense
-        flat
-        hide-details
-        rounded
-        solo
-      ></v-text-field>
-    </v-footer>
+    <div>
+      <v-card elevation="0">
+        <v-card-text>
+          <v-list dense rounded>
+            <v-list-item
+              v-for="(message, index) in allMessagesSt"
+              :key="index"
+              color="blue"
+            >
+              <v-list-item-content
+                :class="{
+                  'text-left': message.user_sender_id !== userIdSt,
+                  'text-right': message.user_sender_id === userIdSt,
+                }"
+              >
+                <v-list-item-title class="font-weight-bold"
+                  >Autor {{ message.user_sender_id }}</v-list-item-title
+                >
+                <v-list-item-subtitle>{{
+                  message.content
+                }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+      </v-card>
+      <v-footer app color="white" height="80" inset elevation="4">
+        <v-text-field
+          v-model="newMessage"
+          @keyup.enter="sendMessage"
+          background-color="grey lighten-1"
+          dense
+          flat
+          hide-details
+          rounded
+          solo
+        ></v-text-field>
+      </v-footer>
+    </div>
   </v-app>
 </template>
 
 <script>
+import io from "socket.io-client";
+import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return {
       drawer: null,
-      room: this.$route.params.room
-    }
+      room: this.$route.params.room,
+      socket: null,
+      // messages: [],
+      newMessage: "",
+      formattedDate: "",
+    };
   },
-}
+  mounted() {
+    // Conectar al espacio de nombres específico en el servidor
+    this.socket = io(`http://localhost:3000/`);
+    // Escuchar eventos del socket
+    this.socket.on("onMessage", (message) => {
+      console.log("dsadasd", message);
+      this.allMessagesSt.push(message);
+    });
+
+    this.socket.on("disconnect", () => {
+      console.log("Desconectado del servidor");
+    });
+    this.fetchAllMessageSt();
+    this.updateDate();
+    // Update the date every second (1000 milliseconds)
+    setInterval(() => {
+      this.updateDate();
+    }, 1000);
+  },
+
+  computed: {
+    ...mapState({
+      userIdSt: (state) => state.userId,
+      isLoadingMessage: (state) => state.MessageStoreModule.isLoadingMessage,
+      allMessagesSt: (state) => state.MessageStoreModule.allMessages,
+    }),
+  },
+  methods: {
+    ...mapActions({
+      createMessageSt: "MessageStoreModule/createMessageStore",
+      fetchAllMessageSt: "MessageStoreModule/fetchAllMessages",
+    }),
+    sendMessage() {
+      if (this.newMessage.trim() === "") return;
+      this.createMessageSt({
+        user_sender_id: this.userIdSt,
+        chat_room_id: this.room,
+        content: this.newMessage,
+      });
+      // this.socket.emit("message", {
+      //   user_sender_id: this.userIdSt,
+      //   chat_room_id: this.room,
+      //   content: this.newMessage,
+      // });
+      // console.log(this.socket);
+      this.newMessage = "";
+    },
+    updateDate() {
+      const currentDate = new Date();
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      };
+      this.formattedDate = currentDate.toLocaleDateString(undefined, options);
+    },
+  },
+};
 </script>
+<style scoped>
+
+</style>

@@ -20,10 +20,11 @@ export default {
   },
   mounted () {
     // Configura la conexión con el servidor de Socket.io
-    const socket = io('http://localhost:3000')
-
+    const socket = io('http://localhost:3000/v1/message')
+  
     // Escucha eventos de chat desde el servidor
     socket.on('chat message', msg => {
+      console.log(msg)
       this.messages.push(msg)
     })
   },
@@ -32,7 +33,7 @@ export default {
       // Envia el mensaje al servidor
       if (this.messageText.trim() !== '') {
         const message = { user: 'Usuario', message: this.messageText }
-        const socket = io('http://localhost:3000')
+        const socket = io('http://localhost:3000/v1/message/create')
         socket.emit('chat message', message)
 
         // Limpia el campo de entrada

@@ -19,10 +19,10 @@ export default {
     },
   },
   actions: {
-    fetchChatRoom({ commit }, body) {
+    fetchChatRoom({ commit }) {
       try {
         return new Promise((resolve) => {
-          ChatRoomApi.fetchAllChatRoom(body).then((res) => {
+          ChatRoomApi.fetchAllChatRoom().then((res) => {
             commit("setChatRoom", res.data);
             resolve(res);
           });
