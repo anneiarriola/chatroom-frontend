@@ -2,10 +2,6 @@
 
 This project is an interactive chatroom built using modern technologies like Vue.js, Node.js, Socket.io for real-time communication, MongoDB as the database to store messages, and Vuetify for design.
 
-## Demo
-
-https://chatroom-frontend-six.vercel.app/
-
 
 ## Technologies Used
 
@@ -57,6 +53,17 @@ Start the server
 ```bash
   npm run serve
 ```
+
+## Usage
+
+To use this project we need
+
+```bash
+  git clone https://github.com/anneiarriola/chatroom-backend.git
+  npm install 
+  node server.js
+```
+
 ## Contribution
 
 We hope you enjoy using this chatroom built with Vue.js, Node.js, Socket.io, MongoDB, and Vuetify!
