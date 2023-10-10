@@ -32,6 +32,7 @@
           @click="
             () => {
               openJoinChat(chat.name, chat._id);
+              dialog = true
             }
           "
         >
@@ -78,6 +79,27 @@
       :chat_id="chatId"
       @close="onCloseModalJoinChat"
     />
+    <v-dialog
+      v-model="dialog"
+      hide-overlay
+      persistent
+      width="300"
+    >
+      <v-card
+        color="primary"
+        dark
+      >
+        <v-card-text>
+          Please stand by...
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
   </v-app>
 </template>
 
@@ -92,6 +114,7 @@ export default {
     chatRoomName: "",
     chatId: "",
     user_id: "",
+    dialog: false
   }),
   components: {
     CreateChatRoom: () => import("@/components/modals/ModalCreateChatRoom.vue"),
@@ -139,7 +162,10 @@ export default {
         chat_room_id: chat_id,
       }).then((res) => {
         if (res.status === 200) {
-          this.$router.push("/chatroom/" + chat_id);
+          setTimeout(() => {
+            this.dialog = false
+            this.$router.push("/chatroom/" + chat_id);
+          }, 3000);
         } else {
           this.showJoinChat = true;
           this.chatRoomName = chatname;

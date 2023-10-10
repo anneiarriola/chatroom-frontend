@@ -10,11 +10,6 @@
         <v-card-title v-else>Join {{ chat_name }} Chat Room</v-card-title>
 
         <v-card-text>
-          <pre>
-         user: {{ userId }}
-         chatid: {{ chat_id }}
-         name: {{ user }}
-          </pre>
           <v-form ref="form" v-model="valid" lazy-validation>
             <div class="text-right">
               <v-btn color="success" @click="createChatRoom()">Join</v-btn>

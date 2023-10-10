@@ -8,7 +8,6 @@
     >
       <v-card>
         <v-card-title>Create User</v-card-title>
-        pre {{ user }}
         <v-card-text>
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field
